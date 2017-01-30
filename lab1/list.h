@@ -36,7 +36,9 @@ public:
 
 	/* forbid copying of lists */
 	List(const List&) = delete;
+
 	List& operator=(const List&) = delete;
+
 private:
 	/* a list node */
 	struct Node {
