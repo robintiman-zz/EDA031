@@ -46,7 +46,6 @@ private:
 		Node* next; // pointer to the next node, nullptr in the last node
 		Node(int v, Node* n) : value(v), next(n) {}
 	};
-
 	Node* first; // pointer to the first node
 };
 
