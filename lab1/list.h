@@ -44,7 +44,7 @@ private:
 	struct Node {
 		int value;  // the node value
 		Node* next; // pointer to the next node, nullptr in the last node
-		Node(int v, Node* n) : value(v), next(n) {}
+		Node(int v = 0, Node* n = nullptr) : value(v), next(n) {}
 	};
 	Node* first; // pointer to the first node
 };
