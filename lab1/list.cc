@@ -8,10 +8,13 @@ List::List() {
 }
 
 List::~List() {
-	Node* ptr = first;
+	Node* del = first;
+	Node* next;
 	int s = size();
 	for (int i = 0; i < s; ++i) {
-		// delete
+		next = del -> next;
+		delete del;
+		del = next;
 	}
 }
 
