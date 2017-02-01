@@ -1,23 +1,27 @@
 #include <iostream>
 #include "list.h"
 
+using namespace std;
+
 List::List() {
 	first = nullptr;
 }
 
 List::~List() {
-
+	Node* ptr = first;
+	int s = size();
+	for (int i = 0; i < s; ++i) {
+		// delete
+	}
 }
 
 bool List::exists(int d) const {
 	Node* ptr = first;
-	int val = ptr->value;
-	int s = size();
-	for (int i = 0; i < s; ++i) {
-		if (ptr->value == d) return true;
-		// Seg fault here because next doesn't have a value if it's null (last element)
-		n = *n.next;
-		val = n.value;
+	int val;
+	while (ptr != nullptr) {
+		val = ptr -> value;
+		ptr = ptr -> next;
+		if (val == d) return true;
 	}
 	return false;
 }
@@ -48,9 +52,69 @@ void List::insertFirst(int d) {
 }
 
 void List::remove(int d, DeleteFlag df) {
-
+	Node* ptr = first;
+	Node* prev_ptr;
+	int val;
+	int count = 0;
+	while (ptr != nullptr) {
+		val = ptr -> value;
+		switch (df) {
+			case List::DeleteFlag::LESS :
+			if (val < d) {
+				if (count > 0) {
+					prev_ptr -> next = ptr -> next;
+				} else {
+					first = ptr -> next;
+				}
+				delete ptr;
+				// free(ptr);
+				// ptr = nullptr;
+				return;
+			}
+			break;
+			case List::DeleteFlag::EQUAL :
+			if (val == d) {
+				if (count > 0) {
+					prev_ptr -> next = ptr -> next;
+				} else {
+					first = ptr -> next;
+				}
+				delete ptr;
+				// free(ptr);
+				// ptr = nullptr;
+				return;
+			}
+			break;
+			case List::DeleteFlag::GREATER :
+			if (val > d) {
+				if (count > 0) {
+					prev_ptr -> next = ptr -> next;
+				} else {
+					first = ptr -> next;
+				}
+				delete ptr;
+				// free(ptr);
+				// ptr = nullptr;
+				return;
+			}
+			break;
+		}
+		++count;
+		prev_ptr = ptr;
+		ptr = ptr -> next;
+	}
 }
 
 void List::print() const {
-
+	Node* ptr = first;
+	int i = 1;
+	int val;
+	while (ptr != nullptr) {
+		val = ptr -> value;
+		cout << val;
+		cout << ", ";
+		++i;
+		ptr = ptr -> next;
+	}
+	cout << endl;
 }
