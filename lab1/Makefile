@@ -10,23 +10,27 @@ DEPFLAGS = -MT $@ -MMD -MP -MF $*.d
 # if you use clang++ and wish to use libc++ instead of GNU's libstdc++.
 # -g is for debugging.
 CPPFLAGS =  -std=c++11
-CXXFLAGS =  -O2 -Wall -Wextra -pedantic-errors -Wold-style-cast
+CXXFLAGS =  -Og -Wall -Wextra -pedantic-errors -Wold-style-cast
 CXXFLAGS += -std=c++11
 CXXFLAGS += -g
 CXXFLAGS += $(DEPFLAGS)
-LDFLAGS =   -g
+LDFLAGS =   -g -L
+LDLIBS = -l
 #CPPFLAGS += -stdlib=libc++
 #CXXFLAGS += -stdlib=libc++
 #LDFLAGS +=  -stdlib=libc++
 
 # Targets
-PROGS = ltest hello
+PROGS = ltest hello encode decode coding
 
 all: $(PROGS)
 
 # Targets rely on implicit rules for compiling and linking
 ltest: ltest.o list.o
 hello: hello.o
+coding: coding.o
+encode: encode.o coding.o
+decode: decode.o coding.o
 
 # Phony targets
 .PHONY: all clean
