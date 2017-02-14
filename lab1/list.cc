@@ -11,13 +11,11 @@ List::~List() {
 
 bool List::exists(int d) const {
 	Node* ptr = first;
-	int val = ptr->value;
-	int s = size();
-	for (int i = 0; i < s; ++i) {
-		if (ptr->value == d) return true;
-		// Seg fault here because next doesn't have a value if it's null (last element)
-		n = *n.next;
-		val = n.value;
+	int val;
+	while(ptr != nullptr) {
+		val = ptr->value;
+		ptr = ptr->next;
+		if (val == d) return true;
 	}
 	return false;
 }
