@@ -29,9 +29,9 @@ TagRemover::TagRemover (istream& cin) {
       // For some reason it only matches every other of the special chars.
       // That's not how regex work. I blame c++
       if (item == "<") {
-        line[index] = (char) 0;
+        line.replace(index, 1, "");
       } else if (item == ">") {
-        line[index] = (char) 0;
+        line.replace(index, 1, "");
       } else if (item == "&lt") {
         line.replace(index, 3, "<");
       } else if (item == "&gt") {
@@ -44,7 +44,7 @@ TagRemover::TagRemover (istream& cin) {
     }
     parsed += line + "\n";
   }
-  std::cout << parsed << '\n';
+  std::cout << parsed << endl;
 }
 
 int main() {

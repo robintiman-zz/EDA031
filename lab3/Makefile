@@ -20,7 +20,7 @@ LDFLAGS =   -g
 #LDFLAGS +=  -stdlib=libc++
 
 # Targets
-PROGS = tagremover primes date
+PROGS = tagremover primes date_test
 
 all: $(PROGS)
 
@@ -28,7 +28,7 @@ all: $(PROGS)
 #spell: spell.o dictionary.o
 tagremover: tagremover.o
 primes: primes.o
-date: date.o
+date_test: date_test.o date.o
 
 # Phony targets
 .PHONY: all clean
