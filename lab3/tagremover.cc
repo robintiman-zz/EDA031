@@ -21,26 +21,28 @@ TagRemover::TagRemover (istream& cin) {
   // cin >> file;
   ifstream file ("test.html");
   // Will match everything we want
-  regex reg ("<|>|&lt|&gt|&nbsp|&amp");
-  std::cerr << "/* error message */" << '\n';
+  regex reg ("<|>|&\\w*");
   while (getline(file, line)) {
     for (auto i = sregex_iterator(line.begin(), line.end(), reg); i != sregex_iterator(); ++i) {
       auto item = i->str();
-      switch (item) {
-        case "<": line[index] = (char) 0;
-        case ">": line[index] = (char) 0;
-        case "&lt": line.replace(index, 3, "<");
-        case "&gt": line.replace(index, 3, ">");
-        case "&nbsp": line.replace(index, 5, " ");
-        case "&amp": line.replace(index, 4, "&");
-        }
+      auto index = i->position();
+      // For some reason it only matches every other of the special chars.
+      // That's not how regex work. I blame c++
+      if (item == "<") {
+        line[index] = (char) 0;
+      } else if (item == ">") {
+        line[index] = (char) 0;
+      } else if (item == "&lt") {
+        line.replace(index, 3, "<");
+      } else if (item == "&gt") {
+        line.replace(index, 3, ">");
+      } else if (item == "&nbsp") {
+        line.replace(index, 5, " ");
+      } else if (item == "&amp") {
+        line.replace(index, 4, "&");
       }
     }
-    parsed += "\n" + line;
-    // while (regex_search(line, match, reg)) {
-    //   for (auto m:match) cout << m << '\n';
-    //
-    // }
+    parsed += line + "\n";
   }
   std::cout << parsed << '\n';
 }
