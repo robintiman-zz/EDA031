@@ -11,6 +11,7 @@ using namespace std;
 
 Dictionary::Dictionary() {
 	const int max_word_length = 25;
+	// Hur ska jag kunna få plats med alla words i en vektor med bara 25 platser?
 	vector<Word> words[max_word_length];
 	ifstream word_stream ("words.txt");
 	string word_str, line;
@@ -25,7 +26,7 @@ Dictionary::Dictionary() {
 		for (int i = 0; i < nbr_of_trigrams; ++i) {
 			trigrams.push_back(line.substr(pos_after_nbr + i * 3 + 1, 3));
 		}
-		words[word_str.length()] =
+
 
 		word_set.insert(word_str);
 	}
