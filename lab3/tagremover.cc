@@ -16,7 +16,7 @@ private:
 };
 
 TagRemover::TagRemover (istream& cin) {
-  string line, tmp_line;
+  string line;
   smatch match;
   // cin >> file;
   ifstream file ("test.html");
@@ -25,15 +25,18 @@ TagRemover::TagRemover (istream& cin) {
   std::cerr << "/* error message */" << '\n';
   while (getline(file, line)) {
     for (auto i = sregex_iterator(line.begin(), line.end(), reg); i != sregex_iterator(); ++i) {
-      auto index = i->position();
-      std::cout << line[index] << '\n';
-      switch (line[index]) {
-        case '<': line[index] = (char) 0;
-        case '>': line[index] = (char) 0;
-        case '&': std::cout << "när" << '\n';
+      auto item = i->str();
+      switch (item) {
+        case "<": line[index] = (char) 0;
+        case ">": line[index] = (char) 0;
+        case "&lt": line.replace(index, 3, "<");
+        case "&gt": line.replace(index, 3, ">");
+        case "&nbsp": line.replace(index, 5, " ");
+        case "&amp": line.replace(index, 4, "&");
+        }
       }
     }
-    parsed += line;
+    parsed += "\n" + line;
     // while (regex_search(line, match, reg)) {
     //   for (auto m:match) cout << m << '\n';
     //
