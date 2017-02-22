@@ -1,0 +1,18 @@
+
+
+#ifndef MNS_H
+#define NAME_SERVER_INTERFACE_H
+
+#include nameserverinterface.h
+#include <map>
+
+
+class MNS {
+
+public:
+  virtual IPAddress lookup(const HostName&) const = 0;
+  virtual void insert(const HostName&, const IPAddress&) = 0;
+  virtual bool remove(const HostName&) = 0;
+
+
+}
