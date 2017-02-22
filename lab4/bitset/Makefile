@@ -21,19 +21,16 @@ LDLIBS = -l
 #LDFLAGS +=  -stdlib=libc++
 
 # Targets
-PROGS = UMNS HNS MNS VNS UMNS
+PROGS = simplebitsettest simplebitset
 
 all: $(PROGS)
 
 # Targets rely on implicit rules for compiling and linking
-# ltest: ltest.o list.o
-# encode: coding.o encode.o
-# decode: coding.o decode.o
-nstest: nstest.o VNS.o HNS.o MNS.o VNS.o UMNS.o
-nstime: nstime.o VNS.o HNS.o MNS.o VNS.o UMNS.o
+simplebitsettest: simplebitsettest.o simplebitset.o
+
 
 # Phony targets
-.PHONY: all cleangit
+.PHONY: all clean
 
 # Standard clean
 clean:

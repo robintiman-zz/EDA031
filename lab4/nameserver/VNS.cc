@@ -7,6 +7,7 @@
 
 using namespace std;
 using IPAddress = unsigned int;
+const IPAddress NON_EXISTING_ADDRESS = 0;
 
 VNS::VNS(){
 vector<tuple<string, IPAddress>> v;

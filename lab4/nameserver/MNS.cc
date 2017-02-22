@@ -1,9 +1,9 @@
 #include "nameserverinterface.h"
 #include <algorithm>
 #include <iterator>
-#include <vector>
 #include <string>
-#include <tuple>
+#include <map>
+
 
 using namespace std;
 using IPAddress = unsigned int;
