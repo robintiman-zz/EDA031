@@ -10,6 +10,9 @@
 class VNS {
 
 public:
-  virtual lookup
+  virtual IPAddress lookup(const HostName&) const = 0;
+  virtual void insert(const HostName&, const IPAddress&) = 0;
+  virtual bool remove(const HostName&) = 0;
+
 
 }

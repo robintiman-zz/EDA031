@@ -17,7 +17,7 @@ void insert(const HostName&, const IPAddress&) {
 }
 
 bool remove(const HostName&, const IPAddress&)  {
-  v::iterator rem = find(v.begin(), v.end(), tuple<string, IPAddress>)
+  auto v::iterator rem = find(v.begin(), v.end(), tuple<string, IPAddress>)
   if (rem != v.end()) {
     v.erase(rem);
     return true;
