@@ -67,7 +67,7 @@ ostream& operator<<(ostream& os, const Date& d) {
 	string year, month, day, date;
 	year = to_string(d.year);
 	d.month < 10 ? month = "0" + to_string(d.month) : month = to_string(d.month);
-	d.day < 10 ? day = "0" + to_string(d.day) : month = to_string(d.day);
+	d.day < 10 ? day = "0" + to_string(d.day) : day = to_string(d.day);
 	date = year + "-" + month + "-" + day;
 	os << date;
 	return os;
