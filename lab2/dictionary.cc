@@ -10,14 +10,11 @@
 using namespace std;
 
 Dictionary::Dictionary() {
-	const int max_word_length = 25;
-	// Hur ska jag kunna få plats med alla words i en vektor med bara 25 platser?
-	vector<Word> words[max_word_length];
 	ifstream word_stream ("words.txt");
 	string word_str, line;
 	vector<string> trigrams;
-	int pos, nbr_of_trigrams;
-	string::size_type pos_after_nbr;
+	int pos, nbr_of_trigrams, word_size;
+	size_t pos_after_nbr;
 	while (getline(word_stream, line) && word_stream.is_open()) {
 		// Need trigrams and word from words.txt
 		pos = line.find(" ");
@@ -26,9 +23,11 @@ Dictionary::Dictionary() {
 		for (int i = 0; i < nbr_of_trigrams; ++i) {
 			trigrams.push_back(line.substr(pos_after_nbr + i * 3 + 1, 3));
 		}
-
-
 		word_set.insert(word_str);
+		word_size = word_str.size();
+		if (word_size <= max_word_length) {
+			
+		}
 	}
 	word_stream.close();
 }

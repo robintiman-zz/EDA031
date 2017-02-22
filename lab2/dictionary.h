@@ -13,6 +13,8 @@ public:
 	std::vector<std::string> get_suggestions(const std::string& word) const;
 private:
 	std::unordered_set<std::string> word_set;
+	const static int max_word_length = 25;
+	std::vector<Word> words [max_word_length];
 };
 
 #endif
