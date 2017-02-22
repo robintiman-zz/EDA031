@@ -20,13 +20,15 @@ LDFLAGS =   -g
 #LDFLAGS +=  -stdlib=libc++
 
 # Targets
-PROGS = tagremover
+PROGS = tagremover primes date_test
 
 all: $(PROGS)
 
 # Targets rely on implicit rules for compiling and linking
 #spell: spell.o dictionary.o
 tagremover: tagremover.o
+primes: primes.o
+date_test: date_test.o date.o
 
 # Phony targets
 .PHONY: all clean
