@@ -4,32 +4,31 @@
 #include <iostream>
 #include <algorithm>
 #include "dictionary.h"
+#include "word.h"
 #include <unordered_set>
 
 using namespace std;
 
 Dictionary::Dictionary() {
-	ifstream word_stream ("words.txt");
-	string word_str, line;
-	vector<string> trigrams;
-	int pos, nbr_of_trigrams, word_size;
-	size_t pos_after_nbr;
-	while (getline(word_stream, line) && word_stream.is_open()) {
-		// Need trigrams and word from words.txt
-		pos = line.find_first_of(" ");
-		word_str = line.substr(0, pos);
-		nbr_of_trigrams = stoi(line.substr(pos + 1, 2), &pos_after_nbr);
-		for (int i = 0; i < nbr_of_trigrams; ++i) {
-			trigrams.push_back(line.substr(pos_after_nbr + i * 3 + 1, 3));
+	ifstream input ("words.txt");
+	int nbr_of_trigrams;
+	if(input) {
+		string word;
+		while(input >> word) {
+			input >> nbr_of_trigrams;
+			vector<string> trigrams;
+			for (int i = 0; i < nbr_of_trigrams; ++i) {
+				string trigram;
+				input >> trigram;
+				trigrams.push_back(trigram);
+			}
+			if (word.size() <= max_word_length) {
+				words[word.size()].push_back(Word(word, trigrams));
+			}
 		}
-		word_set.insert(word_str);
-		word_size = word_str.size();
-		if (word_size < max_word_length) {
-			Word w (word_str, trigrams);
-			words[word_size].push_back(w);
-		}
+	} else {
+		cout << "No file available";
 	}
-	word_stream.close();
 }
 
 bool Dictionary::contains(const string& word) const {
@@ -39,21 +38,86 @@ bool Dictionary::contains(const string& word) const {
 
 vector<string> Dictionary::get_suggestions(const string& word) const {
 	vector<string> suggestions;
-	//	add_trigram_suggestions(suggestions, word);
-	//	rank_suggestions(suggestions, word);
-	//	trim_suggestions(suggestions);
+	add_trigram_suggestions(suggestions, word);
+	rank_suggestions(suggestions, word);
+	trim_suggestions(suggestions);
 	return suggestions;
 }
 
-// void Dictionary::add_trigram_suggestions(std::vector<std::string>& sug, const std::string& word) const {
-// 	int word_size = word.size();
-// 	vector<string> trigrams_of_word = calc_trigrams(word);
-// 	for (int i = word_size - 1; i <= word_size + 1; ++i) {
-//
-// 		sug.insert(sug.end(), words[i].begin(), words[i].end());
-// 	}
-//
-// }
+void Dictionary::rank_suggestions(vector<string>& suggestions, const string& word) const {
+	vector<string> ranked_suggestions[max_word_length + max_word_length + 1];
+
+	// Initializing matrix
+	int d [max_word_length + 1][max_word_length + 1];
+	for(unsigned int i = 0; i < max_word_length + 1; ++i) {
+		d[i][0] = i;
+		d[0][i] = i;
+	}
+
+	// Calculate Levenshtein distance for each suggestion
+	for(string w : suggestions) {
+		for(size_t j = 1; j < w.size() + 1; ++j) {
+			for(size_t i = 1; i < word.size() + 1; ++i) {
+				int value = min(d[i - 1][j] + 1, d[i][j - 1] + 1);
+				if(w.at(j - 1) == word.at(i - 1)) {
+					value = min(value, d[i - 1][j - 1]);
+				}
+				else {
+					value = min(value, d[i - 1][j - 1] + 1);
+				}
+				d[i][j] = value;
+			}
+		}
+		int distance = d[word.size()][w.size()];
+		ranked_suggestions[distance].push_back(w);
+
+		// Remove empty elements
+		vector<string> temp;
+		for (vector<string> word_list : ranked_suggestions) {
+			// Thought shrink_to_fit() would do the trick here but it didn't
+			if (!word_list.empty()) {
+				temp.insert(temp.end(), word_list.begin(), word_list.end());
+			}
+		}
+		suggestions.swap(temp);
+	}
+}
+
+void Dictionary::trim_suggestions(vector<string>& suggestions) const {
+	// Keep the 5 first values of suggestions
+	suggestions.resize(5);
+}
+
+void Dictionary::add_trigram_suggestions(vector<string>& suggestions, const string& word) const {
+	if (word.size() > max_word_length) return;
+
+	// Adding words with the same size
+	vector<Word> temp;
+	const vector<Word>& same_size = words[word.size()];
+	temp.insert(temp.end(), same_size.begin(), same_size.end());
+
+	// Adding words with one less letter
+	if(word.size() > 0) {
+		const vector<Word>& one_less = words[word.size() - 1];
+		temp.insert(temp.end(), one_less.begin(), one_less.end());
+	}
+
+	// Adding words with one more letter
+	if(word.size() < max_word_length - 1) {
+		const vector<Word>& one_more = words[word.size() + 1];
+		temp.insert(temp.end(), one_more.begin(), one_more.end());
+	}
+
+	// Keeping the words with trigrams that match at least half of the written word's trigram
+	vector<string> trigrams = calc_trigrams(word);
+	string word_str;
+	for (Word w : temp) {
+		if (w.get_matches(trigrams) * 2 >= trigrams.size() ) {
+			word_str = w.get_word();
+			suggestions.push_back(word_str);
+		}
+	}
+}
 
 vector<string> Dictionary::calc_trigrams(const string& word) const {
 	vector<string> trigrams;
