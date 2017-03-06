@@ -16,8 +16,8 @@ Dictionary::Dictionary() {
 	size_t pos_after_nbr;
 	while (getline(word_stream, line) && word_stream.is_open()) {
 		// Need trigrams and word from words.txt
-		word_str = line.substr(0, pos);
 		pos = line.find_first_of(" ");
+		word_str = line.substr(0, pos);
 		nbr_of_trigrams = stoi(line.substr(pos + 1, 2), &pos_after_nbr);
 		for (int i = 0; i < nbr_of_trigrams; ++i) {
 			trigrams.push_back(line.substr(pos_after_nbr + i * 3 + 1, 3));
@@ -45,15 +45,15 @@ vector<string> Dictionary::get_suggestions(const string& word) const {
 	return suggestions;
 }
 
-void Dictionary::add_trigram_suggestions(std::vector<std::string>& sug, const std::string& word) const {
-	int word_size = word.size();
-	vector<string> trigrams_of_word = calc_trigrams(word);
-	for (int i = word_size - 1; i <= word_size + 1; ++i) {
-
-		sug.insert(sug.end(), words[i].begin(), words[i].end());
-	}
-
-}
+// void Dictionary::add_trigram_suggestions(std::vector<std::string>& sug, const std::string& word) const {
+// 	int word_size = word.size();
+// 	vector<string> trigrams_of_word = calc_trigrams(word);
+// 	for (int i = word_size - 1; i <= word_size + 1; ++i) {
+//
+// 		sug.insert(sug.end(), words[i].begin(), words[i].end());
+// 	}
+//
+// }
 
 vector<string> Dictionary::calc_trigrams(const string& word) const {
 	vector<string> trigrams;
