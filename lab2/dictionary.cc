@@ -15,6 +15,7 @@ Dictionary::Dictionary() {
 	if(input) {
 		string word;
 		while(input >> word) {
+		  word_set.insert(word);
 			input >> nbr_of_trigrams;
 			vector<string> trigrams;
 			for (int i = 0; i < nbr_of_trigrams; ++i) {
@@ -55,7 +56,8 @@ void Dictionary::rank_suggestions(vector<string>& suggestions, const string& wor
 	}
 
 	// Calculate Levenshtein distance for each suggestion
-	for(string w : suggestions) {
+	for(auto w : suggestions) {
+	  // cout << w << endl;
 		for(size_t j = 1; j < w.size() + 1; ++j) {
 			for(size_t i = 1; i < word.size() + 1; ++i) {
 				int value = min(d[i - 1][j] + 1, d[i][j - 1] + 1);
@@ -112,7 +114,10 @@ void Dictionary::add_trigram_suggestions(vector<string>& suggestions, const stri
 	vector<string> trigrams = calc_trigrams(word);
 	string word_str;
 	for (Word w : temp) {
+	  //cout << w.get_word() << endl;
+	  // cout << w.get_matches(trigrams) << "suggest : word " << trigrams.size() << endl;
 		if (w.get_matches(trigrams) * 2 >= trigrams.size() ) {
+	    // cout << w.get_word() << endl;
 			word_str = w.get_word();
 			suggestions.push_back(word_str);
 		}
@@ -127,6 +132,7 @@ vector<string> Dictionary::calc_trigrams(const string& word) const {
 	} else {
 		for (unsigned i = 0; i < word.length() - 2; ++i) {
 			trigram = word.substr(i, 3);
+		  // cout << trigram << endl;
 			transform(trigram.begin(), trigram.end(), trigram.begin(), ::tolower);
 			trigrams.push_back(trigram);
 		}

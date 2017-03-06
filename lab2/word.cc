@@ -1,6 +1,7 @@
 #include "word.h"
 #include <string>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -22,9 +23,9 @@ unsigned int Word::get_matches(const vector<string> &t) const {
       ++local_count;
       ++param_count;
     } else if (local_t > param_t) {
-      ++local_count;
-    } else {
       ++param_count;
+    } else {
+      ++local_count;
     }
   }
   return matches;
