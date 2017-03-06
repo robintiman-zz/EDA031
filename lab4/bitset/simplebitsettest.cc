@@ -10,6 +10,9 @@ void print(const SimpleBitset& bs) {
 }
 
 int main() {
+
+	cout << (3 << 1L) <<endl;
+
 	// Define an empty bitset, set every third bit, print
 	SimpleBitset bs;
 	for (size_t i = 0; i < bs.size(); i += 3) {
@@ -17,7 +20,7 @@ int main() {
 	}
 	print(bs);
 	cout << endl;
-	
+
 	// Find the first five bits that are set, complement them, print
 	size_t cleared = 0;
 	size_t pos = 0;
@@ -30,7 +33,7 @@ int main() {
 	}
 	print(bs);
 	cout << endl;
-	
+
 	// Count the number of set bits, print
 	size_t set = 0;
 	for (size_t i = 0; i != bs.size(); ++i) {

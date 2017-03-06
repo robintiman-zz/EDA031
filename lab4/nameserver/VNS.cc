@@ -1,41 +1,63 @@
-#include "nameserverinterface.h"
-#include <algorithm>
-#include <iterator>
-#include <vector>
 #include <string>
-#include <tuple>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+#include "nameserverinterface.h"
+#include "VNS.h"
+
 
 using namespace std;
-using IPAddress = unsigned int;
-const IPAddress NON_EXISTING_ADDRESS = 0;
-
-VNS::VNS(){
-vector<tuple<string, IPAddress>> v;
-}
-
-void insert(const HostName&, const IPAddress&) {
-  v.emblace_back(HostName&, IPAddress&)
-}
-
-bool remove(const HostName&, const IPAddress&)  {
-  auto v::iterator rem = find(v.begin(), v.end(), tuple<string, IPAddress>)
-  if (rem != v.end()) {
-    v.erase(rem);
-    return true;
-    }
-return false;
-}
 
 
-IPAddress lookup(const HostName&) {
-  auto lo = find_if(v.begin(), v.end(),
-  [&h](tuple<HostName, IPAddress> p) {return p[0] == h;});
-		if (lo != v.end()){
-			return lo->p[1];
+	VNS::VNS() {}
+
+
+	VNS::~VNS() {
+		server.clear();
+	}
+
+	/*
+	 * Insert a name/address pair. Does not check if the name
+	 * or address already exists.
+	 */
+	void VNS::insert(const HostName& hn, const IPAddress& adress){
+		server.push_back(make_pair(hn, adress));
+	}
+
+	/*
+	 * Remove the pair with the specified host name. Returns true
+	 * if the host name existed and the pair was removed, false
+	 * otherwise.
+	 */
+	bool VNS::remove(const HostName& hn){
+		auto tmp = find_if(server.begin(), server.end(), [&hn](pair<HostName, IPAddress> &p) {return p.first == hn;});
+		if (tmp == server.end()){
+			return false;
+		}
+		server.erase(tmp);
+		return true;
+	}
+
+	/*
+	 * Find the IP address for the specified host name. Returns
+	 * NON_EXISTING_ADDRESS if the host name wasn't in the name
+	 * server.
+	 */
+	IPAddress VNS::lookup(const HostName& hn) const{
+		auto tmp = find_if(server.begin(), server.end(), [&hn](const pair<HostName, IPAddress> &p) {return p.first == hn;});
+		if (tmp != server.end()){
+			return tmp->second;
 		}
 		return NON_EXISTING_ADDRESS;
-}
 
-int main()  {
+	}
 
-}
+// int main(int argc, char const *argv[])
+// {
+// 	VNS v;
+// 	v.insert("11", 11);
+// 	v.insert("10", 111);
+// 	cout << v.lookup("10") << endl;
+// 	return 0;
+// }

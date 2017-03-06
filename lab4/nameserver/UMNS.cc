@@ -1,41 +1,70 @@
-#include "nameserverinterface.h"
-#include <algorithm>
-#include <iterator>
 #include <string>
+#include <vector>
 #include <unordered_map>
+#include <iostream>
 
+#include "nameserverinterface.h"
+#include "UMNS.h"
 
 using namespace std;
-using IPAddress = unsigned int;
-
-UMNS::UMNS(){
-
-unordered_map<string, IPAddress> m;
-}
-
-void insert(const HostName&, const IPAddress&) {
-  m.insert(HostName&, IPAddress&);
-}
-
-bool remove(const HostName&, const IPAddress&)  {
-  m::iterator rem = find(HostName&);
-  if (rem != m.end()) {
-    m.erase(rem);
-    return true;
-    }
-return false;
-}
 
 
-IPAddress lookup(const HostName&) {
-  auto lo = find(HostName&);
-  [&h] HostName& p ) {return p == h;});
-		if (lo != m.end())  {
-			return lo->p;
+	UMNS::UMNS() {
+
+	}
+
+	UMNS::~UMNS() {
+		server.clear();
+	}
+
+	/*
+	 * Insert a name/address pair. Does not check if the name
+	 * or address already exists.
+	 */
+	void UMNS::insert(const HostName& hn, const IPAddress& adress)  {
+		
+		server[hn] = adress;
+	}
+	
+	/*
+	 * Remove the pair with the specified host name. Returns true
+	 * if the host name existed and the pair was removed, false
+	 * otherwise.
+	 */
+	bool UMNS::remove(const HostName& hn)  {
+	
+		auto it = server.find(hn);
+		if (it != server.end()) {
+			server.erase(it);
+			return true;
 		}
+		return false;
+	}
+	
+	/*
+	 * Find the IP address for the specified host name. Returns
+	 * NON_EXISTING_ADDRESS if the host name wasn't in the name
+	 * server.
+	 */
+	IPAddress UMNS::lookup(const HostName& hn) const {
+		auto it = server.find(hn);
+		if(it != server.end()) return it->second;
 		return NON_EXISTING_ADDRESS;
-}
+	}
 
-int main()  {
 
-}
+
+  
+
+
+// int main(int argc, char const *argv[] ){
+//         UMNS v = UMNS();
+//         v.insert("123",1234);
+//         v.insert("122",1224);
+//         v.insert("10", 1000);
+//         v.remove("10");
+//        cout << v.lookup("123") << endl;
+// };
+
+
+
